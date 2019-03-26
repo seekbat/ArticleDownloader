@@ -39,7 +39,7 @@ func LinkScraper(url string, regex *regexp.Regexp) []string {
 	return links
 }
 
-func checkLink(link string, regex regexp.Regexp) (string, bool) {
+func checkLink(link string, regex *regexp.Regexp) (string, bool) {
 	if len(link) < 1 {
 		return "", false
 	}
