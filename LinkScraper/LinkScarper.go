@@ -23,13 +23,45 @@ func LinkScraper(url string, regex regexp.Regexp) []string {
 		log.Fatal("Error loading HTTP response body. ", err)
 	}
 
+	var links []string
+
 	// Find all links and process them with the function
 	// defined earlier
 	document.Find("a").Each(func(index int, element *goquery.Selection) {
 		// See if the href attribute exists on the element
 		href, exists := element.Attr("href")
 		if exists {
-			fmt.Println(href)
+			cleanLink, found := checkLink(href, regex)
+			if found {
+				links = appendIfNotExists(links, href)
+			}
 		}
 	})
+	return links
+}
+
+func checkLink(link, regex regexp.Regexp) (string, bool) {
+	if len(link) < 1 {
+		return "", false
+	}
+	if regex.MatchString(link) {
+		return link, true
+	}
+
+}
+
+/*
+
+ */
+func appendIfNotExists(strings []string, newString string) []string {
+	exists := false
+	for _, existingString := range strings {
+		if existingString == newString {
+			exists = true
+		}
+	}
+	if !exists {
+		strings = append(strings, newString)
+	}
+	return strings
 }
