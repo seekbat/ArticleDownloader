@@ -8,7 +8,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func LinkScraper(url string, regex regexp.Regexp) []string {
+func LinkScraper(url string, regex *regexp.Regexp) []string {
 	// Make HTTP request
 	response, err := http.Get(url)
 	if err != nil {
@@ -46,7 +46,7 @@ func checkLink(link string, regex regexp.Regexp) (string, bool) {
 	if regex.MatchString(link) {
 		return link, true
 	}
-
+	return "", false
 }
 
 /*
