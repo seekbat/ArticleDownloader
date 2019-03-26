@@ -30,7 +30,7 @@ func LinkScraper(url string, regex *regexp.Regexp) []string {
 		// See if the href attribute exists on the element
 		href, exists := element.Attr("href")
 		if exists {
-			cleanLink, found := checkLink(href, regex)
+			found := checkLink(href, regex)
 			if found {
 				links = appendIfNotExists(links, href)
 			}
@@ -39,14 +39,14 @@ func LinkScraper(url string, regex *regexp.Regexp) []string {
 	return links
 }
 
-func checkLink(link string, regex *regexp.Regexp) (string, bool) {
+func checkLink(link string, regex *regexp.Regexp) bool {
 	if len(link) < 1 {
-		return "", false
+		return false
 	}
 	if regex.MatchString(link) {
-		return link, true
+		return true
 	}
-	return "", false
+	return false
 }
 
 /*
