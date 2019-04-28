@@ -1,4 +1,4 @@
-package LinkScraper
+package linkscraper
 
 import (
 	"log"
@@ -40,12 +40,10 @@ func LinkScraper(url string, regex *regexp.Regexp) []string {
 }
 
 func checkLink(link string, regex *regexp.Regexp) bool {
-	if len(link) < 1 {
-		return false
+	if !(len(link) < 1) {
+		return regex.MatchString(link)
 	}
-	if regex.MatchString(link) {
-		return true
-	}
+
 	return false
 }
 
