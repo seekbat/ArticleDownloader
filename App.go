@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/seekbat/ArticleDownloader/LinkScraper"
+	"github.com/seekbat/ArticleDownloader/database
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -13,10 +14,11 @@ import (
 )
 
 type Site struct {
-	ID    int    `json:"_id"`   //ID for Internal Use
-	Name  string `json:"name"`  //Name of the Site
-	URL   string `json:"url"`   //to the Site
-	Regex string `json:"regex"` //to find te Links
+	ID        int    `json:"_id"`       //ID for Internal Use
+	Name      string `json:"name"`      //Name of the Site
+	URL       string `json:"url"`       //to the Site
+	LinkRegex string `json:"linkregex"` //to find te Links
+	IDRegex string `json:"idregex"` //to extract the ID
 }
 
 type LinkList struct {
@@ -31,29 +33,18 @@ type ArticleLink struct {
 
 func main() {
 	min := Site{
-		ID:    1,
-		Name:  "20min",
-		URL:   "https://www.20min.ch",
-		Regex: `\/([A-Za-z0-9-]{1,})([0-9]{1,}$)`,
+		ID:        1,
+		Name:      "20min",
+		URL:       "https://www.20min.ch",
+		LinkRegex: `\/([A-Za-z0-9-]{1,})([0-9]{1,}$)`,
+		IDRegex: `([0-9]{1,}$)`,
 	}
 
 	var links []string
-	r, _ := regexp.Compile(min.Regex)
+	r, _ := regexp.Compile(min.LinkRegex)
 	links = LinkScraper.LinkScraper(min.URL, r)
 
-	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Check the connection
-	err = client.Ping(context.TODO(), nil)
-
-	fmt.Println("Connected to MongoDB!")
 
 	rid, _ := regexp.Compile(`([0-9]{1,}$)`)
 	collection := client.Database("ArticleDownloader").Collection("20min")

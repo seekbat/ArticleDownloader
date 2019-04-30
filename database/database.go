@@ -2,9 +2,8 @@ package database
 
 import (
 	"context"
-	"fmt"
-	"github.com/mongodb/mongo-go-driver/mongo"
-	"github.com/mongodb/mongo-go-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 )
 
@@ -17,7 +16,28 @@ import (
  * ==========================================
  */
 
-func AddLinksToDb(links []string) error {
+type Database struct {
+	op     *options.ClientOptions
+	client *mongo.Client
+	ctx    context.Context
+}
 
-	return nil
+func NewDatabase(op *options.ClientOptions, ctx context.Context) *Database {
+	client, err := mongo.Connect(ctx, op)
+	checkErr(err)
+
+	return &Database{op, client, ctx}
+}
+
+func (d *Database) AddLinksToDb() {
+
+	err := d.client.Ping(d.ctx, nil) // Check the connection
+	checkErr(err)
+
+}
+
+func checkErr(e error) {
+	if e != nil {
+		log.Fatal(e)
+	}
 }
