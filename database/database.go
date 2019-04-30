@@ -1,5 +1,13 @@
 package database
 
+import (
+	"context"
+	"fmt"
+	"github.com/mongodb/mongo-go-driver/mongo"
+	"github.com/mongodb/mongo-go-driver/mongo/options"
+	"log"
+)
+
 /*
  * ==========================================
  *  Title:
@@ -9,6 +17,7 @@ package database
  * ==========================================
  */
 
-func AddLinksToDb(links []string) error{
+func AddLinksToDb(links []string) error {
 
+	return nil
 }
