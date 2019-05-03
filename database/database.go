@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
-	"github.com/seekbat/ArticleDownloader"
+	"github.com/seekbat/ArticleDownloader/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -22,27 +22,32 @@ import (
  */
 
 type Database struct {
-	op     *options.ClientOptions
 	client *mongo.Client
 	ctx    context.Context
 }
 
-func NewDatabase(op *options.ClientOptions, ctx context.Context) *Database {
-	client, err := mongo.Connect(ctx, op)
+func NewDatabase(connectString string, ctx context.Context) *Database {
+	client, err := mongo.Connect(ctx, connectString)
 	checkErr(err)
 
-	return &Database{op, client, ctx}
+	return &Database{client, ctx}
 }
 
-func (d *Database) AddLinksToDb(linklist Link, regexid string) {
-	rid, _ := regexp.Compile(regexid)
+func (d *Database) AddLinksToDb(linklist models.LinkList) {
+
 	err := d.client.Ping(d.ctx, nil) // Check the connection
-	checkErr(err)
-	for _, link := range links {
+	abortIfError(err)
+	collection := d.client.Database("ArticleDownloader").Collection(linklist.SiteName)
+	for _, link := range linklist.Links {
+		_, err := collection.InsertOne(d.ctx, link)
+		logError(err)
+	}
+
+	for _, link := range linklist.Links {
 		fmt.Println(link)
 		id, err := strconv.Atoi(rid.FindString(link))
-		var link = ArticleDownloader.ArticleLink{id, link, time.Now().Unix()}
-		_, err = collection.InsertOne(context.TODO(), link)
+		var link = models.ArticleLink{id, link, time.Now().Unix()}
+		_, err = collection.InsertOne(d.ctx, link)
 		if err != nil {
 			fmt.Print(err)
 		}
@@ -50,8 +55,13 @@ func (d *Database) AddLinksToDb(linklist Link, regexid string) {
 
 }
 
-func checkErr(e error) {
+func abortIfError(e error) {
 	if e != nil {
 		log.Fatal(e)
+	}
+}
+func logError(e error) {
+	if e != nil {
+		fmt.Print(e)
 	}
 }

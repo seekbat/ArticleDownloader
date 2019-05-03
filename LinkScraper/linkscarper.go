@@ -1,14 +1,23 @@
 package linkscraper
 
 import (
+	"fmt"
+	"github.com/seekbat/ArticleDownloader/models"
 	"log"
 	"net/http"
 	"regexp"
+	"strconv"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-func LinkScraper(url string, regex *regexp.Regexp) []string {
+func LinkScraper(url string, regex string, idregex string) []models.ArticleLink {
+
+	// Compiling Regexes
+	r, _ := regexp.Compile(regex)
+	rid, _ := regexp.Compile(idregex)
+
 	// Make HTTP request
 	response, err := http.Get(url)
 	if err != nil {
@@ -23,6 +32,7 @@ func LinkScraper(url string, regex *regexp.Regexp) []string {
 	}
 
 	var links []string
+	var linklist []models.ArticleLink
 
 	// Find all links and process them with the function
 	// defined earlier
@@ -30,13 +40,21 @@ func LinkScraper(url string, regex *regexp.Regexp) []string {
 		// See if the href attribute exists on the element
 		href, exists := element.Attr("href")
 		if exists {
-			found := checkLink(href, regex)
+			found := checkLink(href, r)
 			if found {
 				links = appendIfNotExists(links, href)
 			}
 		}
+
+		for link := range links {
+			id, err := strconv.Atoi(rid.FindString(link))
+			fmt.Print(err)
+			var article = models.ArticleLink{id, link, time.Now().Unix()}
+			linklist = append(linklist, article)
+		}
 	})
-	return links
+
+	return linklist
 }
 
 func checkLink(link string, regex *regexp.Regexp) bool {
