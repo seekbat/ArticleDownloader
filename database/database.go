@@ -7,7 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
-	"reflect"
 )
 
 /*
@@ -51,7 +50,7 @@ func logError(e error) {
 	switch e {
 	case nil:
 	case context.DeadlineExceeded:
-	case mongo.WriteException:
+	case mongo.WriteException{}:
 
 	default:
 		fmt.Println(e)
