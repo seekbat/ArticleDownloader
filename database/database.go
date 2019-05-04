@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/seekbat/ArticleDownloader/models"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 )
 
@@ -23,7 +24,7 @@ type Database struct {
 }
 
 func NewDatabase(connectString string, ctx context.Context) *Database {
-	client, err := mongo.Connect(ctx, connectString)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(connectString))
 	abortIfError(err)
 
 	return &Database{client, ctx}

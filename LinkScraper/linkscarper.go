@@ -46,7 +46,7 @@ func LinkScraper(url string, regex string, idregex string) []models.ArticleLink 
 			}
 		}
 
-		for link := range links {
+		for _, link := range links {
 			id, err := strconv.Atoi(rid.FindString(link))
 			fmt.Print(err)
 			var article = models.ArticleLink{id, link, time.Now().Unix()}
