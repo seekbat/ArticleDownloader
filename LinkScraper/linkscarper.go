@@ -48,7 +48,7 @@ func LinkScraper(url string, regex string, idregex string) []models.ArticleLink 
 
 		for _, link := range links {
 			id, err := strconv.Atoi(rid.FindString(link))
-			fmt.Print(err)
+			checkErr(err)
 			var article = models.ArticleLink{id, link, time.Now().Unix()}
 			linklist = append(linklist, article)
 		}
@@ -79,4 +79,10 @@ func appendIfNotExists(strings []string, newString string) []string {
 		strings = append(strings, newString)
 	}
 	return strings
+}
+
+func checkErr(e error) {
+	if e != nil {
+		fmt.Println(e)
+	}
 }
