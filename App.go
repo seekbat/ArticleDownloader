@@ -18,6 +18,7 @@ func main() {
 		LinkRegex: `\/([A-Za-z0-9-]{1,})([0-9]{1,}$)`,
 		IDRegex:   `([0-9]{1,}$)`,
 	}
+	Sites = append(Sites, min)
 	db := database.NewDatabase("mongodb://localhost:27017", context.TODO())
 
 	for _, site := range Sites {

@@ -48,6 +48,6 @@ func abortIfError(e error) {
 }
 func logError(e error) {
 	if e != nil {
-		fmt.Print(e)
+		fmt.Println(e)
 	}
 }
