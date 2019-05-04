@@ -48,7 +48,12 @@ func abortIfError(e error) {
 	}
 }
 func logError(e error) {
-	if e != nil {
+	switch e {
+	case nil:
+
+	case context.DeadlineExceeded:
+		fmt.Println("works")
+	default:
 		fmt.Println(reflect.TypeOf(e))
 	}
 }
