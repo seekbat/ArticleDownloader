@@ -2,11 +2,11 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"github.com/seekbat/ArticleDownloader/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"reflect"
 )
 
 /*
@@ -48,6 +48,6 @@ func abortIfError(e error) {
 }
 func logError(e error) {
 	if e != nil {
-		fmt.Println(e)
+		reflect.TypeOf(e)
 	}
 }

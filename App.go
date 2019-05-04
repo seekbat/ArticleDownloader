@@ -5,6 +5,7 @@ import (
 	"github.com/seekbat/ArticleDownloader/LinkScraper"
 	"github.com/seekbat/ArticleDownloader/database"
 	"github.com/seekbat/ArticleDownloader/models"
+	"time"
 )
 
 var Sites []models.Site
@@ -19,7 +20,8 @@ func main() {
 		IDRegex:   `([0-9]{1,}$)`,
 	}
 	Sites = append(Sites, min)
-	db := database.NewDatabase("mongodb://localhost:27017", context.TODO())
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	db := database.NewDatabase("mongodb://localhost:27017", ctx)
 
 	for _, site := range Sites {
 		var articlelinks []models.ArticleLink
