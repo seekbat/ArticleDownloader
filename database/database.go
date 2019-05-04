@@ -50,10 +50,10 @@ func abortIfError(e error) {
 func logError(e error) {
 	switch e {
 	case nil:
-
 	case context.DeadlineExceeded:
+	case mongo.WriteException:
 
 	default:
-		fmt.Println(reflect.TypeOf(e))
+		fmt.Println(e)
 	}
 }
