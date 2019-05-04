@@ -5,12 +5,6 @@ import (
 	"github.com/seekbat/ArticleDownloader/LinkScraper"
 	"github.com/seekbat/ArticleDownloader/database"
 	"github.com/seekbat/ArticleDownloader/models"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"regexp"
-	"strconv"
-	"time"
 )
 
 var Sites []models.Site
@@ -26,7 +20,6 @@ func main() {
 	}
 	db := database.NewDatabase("mongodb://localhost:27017", context.TODO())
 
-	r, _ := regexp.Compile(min.LinkRegex)
 	for _, site := range Sites {
 		var articlelinks []models.ArticleLink
 		articlelinks = linkscraper.LinkScraper(site.URL, site.LinkRegex, site.IDRegex)

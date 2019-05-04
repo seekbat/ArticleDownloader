@@ -6,8 +6,6 @@ import (
 	"github.com/seekbat/ArticleDownloader/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
-	"strconv"
-	"time"
 )
 
 /*
