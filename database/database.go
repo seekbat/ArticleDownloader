@@ -52,7 +52,7 @@ func logError(e error) {
 	case nil:
 
 	case context.DeadlineExceeded:
-		fmt.Println("works")
+
 	default:
 		fmt.Println(reflect.TypeOf(e))
 	}
