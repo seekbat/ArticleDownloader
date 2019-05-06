@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"reflect"
 )
 
 /*
@@ -54,5 +55,6 @@ func logError(e error) {
 
 	default:
 		fmt.Println(e)
+		fmt.Println(reflect.TypeOf(e))
 	}
 }
