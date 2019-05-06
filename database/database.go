@@ -51,7 +51,7 @@ func logError(e error) {
 	switch e {
 	case nil:
 	case context.DeadlineExceeded:
-	case mongo.ErrMultipleIndexDrop:
+	case e.(*mongo.WriteException):
 
 	default:
 		fmt.Println(e)
