@@ -48,13 +48,12 @@ func abortIfError(e error) {
 	}
 }
 func logError(e error) {
-	switch e {
-	case nil:
-	case context.DeadlineExceeded:
-	case e.(*mongo.WriteException):
-
-	default:
-		fmt.Println(e)
-		fmt.Println(reflect.TypeOf(e))
+	if e != nil {
+		if e == context.DeadlineExceeded {
+		} else if _, ok := e.(*mongo.WriteException); ok { //check if it is of the type mongo.WriteException
+		} else {
+			fmt.Println(e)
+			fmt.Println(reflect.TypeOf(e))
+		}
 	}
 }
