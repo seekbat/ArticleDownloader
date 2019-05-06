@@ -50,7 +50,7 @@ func abortIfError(e error) {
 func logError(e error) {
 	if e != nil {
 		if e == context.DeadlineExceeded {
-		} else if _, ok := e.(*mongo.WriteException); ok { //check if it is of the type mongo.WriteException
+		} else if _, ok := e.(mongo.WriteException); ok { //check if it is of the type mongo.WriteException
 			fmt.Println("dsa")
 		} else {
 			fmt.Println(e)
